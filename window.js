@@ -1,7 +1,9 @@
 // https://www.codeproject.com/Questions/5253015/How-to-get-all-tabs-details-from-current-browser-i
 
 function processWindow(win, i) {
-  let name = win.name;
+  if (win.name == null) {
+    win.name = "window " + (i+1);
+  } 
   let tabs = [];
   console.log('processing : ' + win.tabs.length);
   for (let j=0; j<win.tabs.length; j++) {
@@ -14,49 +16,47 @@ function processWindow(win, i) {
   div.id = "window " + i;
   div.className = "windowDiv";
   let h2 = document.createElement('H2');
-  h2.innerText = 'Window: ' + win.name;
+  h2.innerText = 'Window name: ' + win.name;
   div.appendChild(h2);
   
-  let renameForm = document.createElement("FORM");
-  renameForm.method = "POST";
-  let formName = 'renameForm' + i;
-  renameForm.name = formName;
-  let newlabel = document.createElement("Label");
+  let nameDiv = document.createElement('div');
+  let label = document.createElement("Label");
   let labelId = 'changeName' + i;
-  newlabel.setAttribute("for",labelId);
-  newlabel.innerHTML = "Change window name: ";
-  renameForm.appendChild(newlabel);
+  label.setAttribute("for",labelId);
+  label.innerHTML = "Change window name: ";
 
   var inp = document.createElement("input"); //input element, text
   inp.setAttribute('type',"text");
   inp.setAttribute('name',"windowName");
-  inp.setAttribute('placeholder', name);
+  inp.setAttribute('placeholder', win.name);
   inp.setAttribute('id', labelId)
+  
   var btn = document.createElement('button');
   var btnId = 'btnNameChange' + i;
   btn.id = btnId;
-  btn.innerText = "Click me";
+  btn.innerText = "Update Name";
   
-  var s = document.createElement("input"); //input element, Submit button
-  s.setAttribute('type',"submit");
-  s.setAttribute('value',"Submit");
-  var submitLabel = 'submitNameChange' + i;
-  s.id = submitLabel;
+  nameDiv.appendChild(label);
+  nameDiv.appendChild(inp);
+  nameDiv.appendChild(btn);
 
-
-  renameForm.appendChild(inp);
-  renameForm.appendChild(s)
-  
-  div.appendChild(btn);
+  // add action listener to button
   btn.addEventListener('click', async () => {
-    console.log('eventListener: ' + i);
-    win.name = "new_name " + i
-    h2.innerText = "Window name: " + win.name;
-    inp.setAttribute('placeholder', win.name);
+    if (inp.value != "") {
+      win.name = inp.value;
+      inp.value = "";
+      h2.innerText = "Window name: " + win.name;
+      inp.setAttribute('placeholder', win.name);
+    } else {
+      let warning = document.createElement('p');
+      warning.innerText = "**WARNING: new name must not be an empty string.**"
+      warning.className = "warning";
+      nameDiv.appendChild(warning);
+    }
   });
 
+  div.appendChild(nameDiv);
 
-  div.appendChild(renameForm);
 
   let tabsH3 = document.createElement('H3');
   tabsH3.innerText = "Tabs";
