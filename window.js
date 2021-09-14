@@ -12,11 +12,31 @@ function processWindow(win, i) {
   // create document option
   let div = document.createElement("DIV");
   div.id = "window " + i;
+  div.className = "windowDiv";
   let h2 = document.createElement('H2');
   h2.innerText = 'Window: ' + win.name;
   div.appendChild(h2);
   
-  //var renameForm = document.createElement("FORM");
+  let renameForm = document.createElement("FORM");
+  let newlabel = document.createElement("Label");
+  let labelId = 'changeName' + i;
+  newlabel.setAttribute("for",labelId);
+  newlabel.innerHTML = "Change window name: ";
+  renameForm.appendChild(newlabel);
+
+  var i = document.createElement("input"); //input element, text
+  i.setAttribute('type',"text");
+  i.setAttribute('name',"windowName");
+  i.setAttribute('placeholder', name);
+  i.setAttribute('id', labelId)
+  var s = document.createElement("input"); //input element, Submit button
+  s.setAttribute('type',"submit");
+  s.setAttribute('value',"Submit");
+
+  renameForm.appendChild(i);
+  renameForm.appendChild(s)
+  div.appendChild(renameForm);
+
   let tabsH3 = document.createElement('H3');
   tabsH3.innerText = "Tabs";
   div.appendChild(tabsH3);
@@ -39,6 +59,7 @@ function processWindow(win, i) {
 
   return div;
 }
+
 
 var wins = [];
 window.onload = function() {
