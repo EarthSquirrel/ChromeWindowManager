@@ -1,9 +1,12 @@
 // https://www.codeproject.com/Questions/5253015/How-to-get-all-tabs-details-from-current-browser-i
 
+
 function processWindow(win, i) {
-  if (win.name == null) {
-    win.name = "window " + (i+1);
-  } 
+  console.log(win);
+  //if (win.name == null) {
+    //win.name = "window " + (i+1);
+    //updateName(win.id, win.name);
+  //} 
   let tabs = [];
   console.log('processing : ' + win.tabs.length);
   for (let j=0; j<win.tabs.length; j++) {
@@ -47,6 +50,10 @@ function processWindow(win, i) {
       inp.value = "";
       h2.innerText = "Window name: " + win.name;
       inp.setAttribute('placeholder', win.name);
+      console.log('type before update: ' + typeof(win));
+      updateName(win.id, win.name);
+      console.log('Back in EventListener');
+      console.log(win);
     } else {
       let warning = document.createElement('p');
       warning.innerText = "**WARNING: new name must not be an empty string.**"
@@ -55,7 +62,7 @@ function processWindow(win, i) {
     }
   });
 
-  div.appendChild(nameDiv);
+  //div.appendChild(nameDiv);
 
 
   let tabsH3 = document.createElement('H3');
@@ -77,12 +84,9 @@ function processWindow(win, i) {
   }
   div.appendChild(ul);
 
+  
 
   return div;
-}
-
-function updateName(event) {
-  console.log('update name called ' + event);
 }
 
 
