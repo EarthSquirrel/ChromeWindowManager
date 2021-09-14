@@ -18,23 +18,44 @@ function processWindow(win, i) {
   div.appendChild(h2);
   
   let renameForm = document.createElement("FORM");
+  renameForm.method = "POST";
+  let formName = 'renameForm' + i;
+  renameForm.name = formName;
   let newlabel = document.createElement("Label");
   let labelId = 'changeName' + i;
   newlabel.setAttribute("for",labelId);
   newlabel.innerHTML = "Change window name: ";
   renameForm.appendChild(newlabel);
 
-  var i = document.createElement("input"); //input element, text
-  i.setAttribute('type',"text");
-  i.setAttribute('name',"windowName");
-  i.setAttribute('placeholder', name);
-  i.setAttribute('id', labelId)
+  var inp = document.createElement("input"); //input element, text
+  inp.setAttribute('type',"text");
+  inp.setAttribute('name',"windowName");
+  inp.setAttribute('placeholder', name);
+  inp.setAttribute('id', labelId)
+  var btn = document.createElement('button');
+  var btnId = 'btnNameChange' + i;
+  btn.id = btnId;
+  btn.innerText = "Click me";
+  
   var s = document.createElement("input"); //input element, Submit button
   s.setAttribute('type',"submit");
   s.setAttribute('value',"Submit");
+  var submitLabel = 'submitNameChange' + i;
+  s.id = submitLabel;
 
-  renameForm.appendChild(i);
+
+  renameForm.appendChild(inp);
   renameForm.appendChild(s)
+  //renameForm.appendChild(btn);
+  for (let k=0; k<renameForm.childNodes.length; k++){
+    console.log(renameForm.childNodes[k].id);
+  }
+  div.appendChild(btn);
+  btn.addEventListener('click', async () => {
+    console.log('eventListener: ');
+  });
+
+
   div.appendChild(renameForm);
 
   let tabsH3 = document.createElement('H3');
@@ -58,6 +79,10 @@ function processWindow(win, i) {
 
 
   return div;
+}
+
+function updateName(event) {
+  console.log('update name called ' + event);
 }
 
 
