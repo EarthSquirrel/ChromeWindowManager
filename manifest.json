@@ -4,10 +4,8 @@
     "description": "This extension shows a Hello World message!",
     "version": "1.0",
     "browser_action": {
+        "default_popup": "popup.html",
         "default_icon": "icon.png"
-    },
-    "chrome_url_overrides": {
-        "newtab": "window.html"
     },
     "permissions": ["tabs"],
     "background": {
