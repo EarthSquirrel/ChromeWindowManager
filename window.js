@@ -46,13 +46,13 @@ function processWindow(win, i) {
 
   renameForm.appendChild(inp);
   renameForm.appendChild(s)
-  //renameForm.appendChild(btn);
-  for (let k=0; k<renameForm.childNodes.length; k++){
-    console.log(renameForm.childNodes[k].id);
-  }
+  
   div.appendChild(btn);
   btn.addEventListener('click', async () => {
-    console.log('eventListener: ');
+    console.log('eventListener: ' + i);
+    win.name = "new_name " + i
+    h2.innerText = "Window name: " + win.name;
+    inp.setAttribute('placeholder', win.name);
   });
 
 
