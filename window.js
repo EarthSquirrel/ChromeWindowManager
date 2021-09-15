@@ -117,49 +117,6 @@ function processWindow(win, i) {
   h2.innerText = 'Window name: ' + win.name;
   div.appendChild(h2);
   
-  let nameDiv = document.createElement('div');
-  let label = document.createElement("Label");
-  let labelId = 'changeName' + i;
-  label.setAttribute("for",labelId);
-  label.innerHTML = "Change window name: ";
-
-  var inp = document.createElement("input"); //input element, text
-  inp.setAttribute('type',"text");
-  inp.setAttribute('name',"windowName");
-  inp.setAttribute('placeholder', win.name);
-  inp.setAttribute('id', labelId)
-  
-  var btnName = document.createElement('button');
-  var btnNameId = 'btnNameChange' + i;
-  btnName.id = btnNameId;
-  btnName.innerText = "Update Name";
-  
-  nameDiv.appendChild(label);
-  nameDiv.appendChild(inp);
-  nameDiv.appendChild(btnName);
-
-  // add action listener to button
-  btnName.addEventListener('click', async () => {
-    if (inp.value != "") {
-      win.name = inp.value;
-      inp.value = "";
-      h2.innerText = "Window name: " + win.name;
-      inp.setAttribute('placeholder', win.name);
-      console.log('type before update: ' + typeof(win));
-      updateName(win.id, win.name);
-      console.log('Back in EventListener');
-      console.log(win);
-    } else {
-      let warning = document.createElement('p');
-      warning.innerText = "**WARNING: new name must not be an empty string.**"
-      warning.className = "warning";
-      nameDiv.appendChild(warning);
-    }
-  });
-
-
-  
-
   var saveDiv = document.createElement('div');
   var btnSave = document.createElement('button');
   btnSave.innerText = "Save Window";
