@@ -170,6 +170,11 @@ window.onload = function() {
   chrome.storage.local.get(null, function(items) {
     let allKeys = Object.keys(items);
     console.log('allKeys ' + allKeys);
+    if (allKeys.length == 0) {
+      let noSaved = document.createElement('p');
+      noSaved.innerText = "There are currently no saved windows";
+      closedDiv.appendChild(noSaved);
+    }
     for (let i=0; i<allKeys.length; i++) {
       console.log(allKeys[i]);
       chrome.storage.local.get(allKeys[i], function (obj) {
