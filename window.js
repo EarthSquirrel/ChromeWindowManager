@@ -1,12 +1,45 @@
 // https://www.codeproject.com/Questions/5253015/How-to-get-all-tabs-details-from-current-browser-i
 
 function listClosedWindow(obj) {
+  let tabs = obj.winObject.tabs;
+  let win = obj.winObject;
   let div = document.createElement('div');
+  div.id = obj.key;
   let h2 = document.createElement('h2');
   h2.innerText = "Window name: " + obj.name;
   div.appendChild(h2);
-  
-  let ul = buildTabsUl(obj.winObject.tabs);
+ 
+  let btnOpen = document.createElement('button');
+  btnOpen.innerText = "Open Window";
+  btnOpen.addEventListener('click', async () => {
+    //let newWin = Object.assign({}, win);
+    let acceptedKeys = ['height', 'incognito', 'left', 
+                        'setSelfAsOpener', 'state', 'top', 'type', 'width'];
+    let newWin = {};
+    for (let k=0; k<acceptedKeys.length; k++) {
+      let key = acceptedKeys[k];
+      if (key in win) {
+        newWin[key] = win[key];
+      }
+    }
+    let urls = [];
+    for (let t=0; t<tabs.length; t++){
+      urls.push(tabs[t].url);
+    }
+    newWin['url'] = urls;
+    newWin['focused'] = true;
+    chrome.windows.create(newWin); 
+    
+    // remove window from storage
+    chrome.storage.local.remove(obj.key, function () {
+      console.log('removed ' + obj.key + ' from storage');
+    });
+    div.remove();
+    
+  });
+  div.appendChild(btnOpen);
+  // list all the tabs
+  let ul = buildTabsUl(tabs);
   div.appendChild(ul);
 
   return div;
@@ -40,6 +73,7 @@ function updateSaveDiv(saveDiv, win){
     let r = (Math.random() + 1).toString(36).substring(2);
     let data = {};
     data[r] = {
+      key: r,
       name: newName.value, 
       type: 'closedWindow',  
       winObject: win
