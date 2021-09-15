@@ -10,11 +10,22 @@ function listClosedWindow(obj) {
   div.appendChild(h2);
  
   let btnOpen = document.createElement('button');
+  btnOpen.className = "giveMargin";
   btnOpen.innerText = "Open Window";
   btnOpen.addEventListener('click', async () => {
     openWindow(obj);  
   });
   div.appendChild(btnOpen);
+  let btnRemove = document.createElement('button');
+  btnRemove.className = "giveMargin";
+  btnRemove.innerText = "Remove saved window";
+  btnRemove.addEventListener('click', async () => {
+    chrome.storage.local.remove(obj.key, function () {
+      console.log('removed window ' + obj.name + ' from storage');
+    });
+    div.remove();
+  });
+  div.appendChild(btnRemove);
   // list all the tabs
   let ul = buildTabsUl(tabs);
   div.appendChild(ul);
