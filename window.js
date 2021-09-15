@@ -6,7 +6,7 @@ function listClosedWindow(obj) {
   let div = document.createElement('div');
   div.id = obj.key;
   let h2 = document.createElement('h2');
-  h2.innerText = "Window name: " + obj.name;
+  h2.innerText = "Window: " + obj.name;
   div.appendChild(h2);
  
   let btnOpen = document.createElement('button');
@@ -114,7 +114,7 @@ function processWindow(win, i) {
   div.id = "window " + i;
   div.className = "windowDiv";
   let h2 = document.createElement('H2');
-  h2.innerText = 'Window name: ' + win.name;
+  h2.innerText = 'Window: ' + (i+1);
   div.appendChild(h2);
   
   var saveDiv = document.createElement('div');
