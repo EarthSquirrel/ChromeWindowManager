@@ -72,6 +72,7 @@ function updateSaveDiv(saveDiv, win){
       saveDiv.removeChild(saveDiv.firstChild);
     }
     let p = document.createElement('p');
+    p.className = "windowSaved";
     p.innerText = "Window Saved: " + newName.value;
     saveDiv.appendChild(p);
 
