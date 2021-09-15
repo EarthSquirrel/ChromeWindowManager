@@ -45,6 +45,14 @@ function updateSaveDiv(saveDiv, win){
  
   //create event listener
   btnSave.addEventListener('click', async () => {
+    if (newName.value == "") {
+      let warning = document.createElement('p');
+      warning.innerText = "**WARNING: new name must not be an empty string.**"
+      warning.className = "warning";
+      saveDiv.appendChild(warning);
+      return "";
+    }
+    
     console.log(win);
     //Can change 7 to 2 for longer results.
     let r = (Math.random() + 1).toString(36).substring(2);
@@ -58,6 +66,15 @@ function updateSaveDiv(saveDiv, win){
     chrome.storage.local.set(data, function () {
       console.log('added window:' + r);
     });
+    // close the window once saved
+    chrome.windows.remove(win.id);
+    while(saveDiv.firstChild) {
+      saveDiv.removeChild(saveDiv.firstChild);
+    }
+    let p = document.createElement('p');
+    p.innerText = "Window Saved: " + newName.value;
+    saveDiv.appendChild(p);
+
   });
 
   // add things to saveDiv
@@ -139,7 +156,6 @@ function processWindow(win, i) {
     }
   });
 
-  //div.appendChild(nameDiv);
 
   
 
