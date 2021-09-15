@@ -1,6 +1,49 @@
 // https://www.codeproject.com/Questions/5253015/How-to-get-all-tabs-details-from-current-browser-i
 
 
+function updateSaveDiv(saveDiv, win){
+  // remove all content in saveDiv
+  while(saveDiv.firstChild) {
+    saveDiv.removeChild(saveDiv.firstChild);
+  }
+  // update the class
+  saveDiv.className = "savingWindow";
+  var h4 = document.createElement('h4');
+  h4.innerText = "Save Window";
+  saveDiv.appendChild(h4);
+
+  //name the window
+  let nameLabel = document.createElement('label');
+  nameLabel.innerText = "Name the window: ";
+  let newName = document.createElement("input"); //input element, text
+  newName.type = "text"; //.setAttribute('type',"text");
+  //inp.setAttribute('name',"windowName");
+  //inp.setAttribute('placeholder', win.name);
+  //inp.setAttribute('id', labelId)
+  //newName.id = "newNameInput"
+
+  let btnSave = document.createElement('button');
+  //var btnNameId = 'btnNameChange' + i;
+  //btnName.id = btnNameId;
+  btnSave.innerText = "Save Window";
+ 
+  //create event listener
+  btnSave.addEventListener('click', async () => {
+    console.log(win);
+    let winStr = JSON.stringify(win);
+    console.log(winStr);
+  });
+
+  // add things to saveDiv
+  saveDiv.appendChild(nameLabel);
+  saveDiv.appendChild(newName);
+  saveDiv.appendChild(document.createElement('br'));
+  saveDiv.appendChild(btnSave);
+  return saveDiv;
+
+  
+}
+
 function processWindow(win, i) {
   console.log(win);
   //if (win.name == null) {
@@ -34,17 +77,17 @@ function processWindow(win, i) {
   inp.setAttribute('placeholder', win.name);
   inp.setAttribute('id', labelId)
   
-  var btn = document.createElement('button');
-  var btnId = 'btnNameChange' + i;
-  btn.id = btnId;
-  btn.innerText = "Update Name";
+  var btnName = document.createElement('button');
+  var btnNameId = 'btnNameChange' + i;
+  btnName.id = btnNameId;
+  btnName.innerText = "Update Name";
   
   nameDiv.appendChild(label);
   nameDiv.appendChild(inp);
-  nameDiv.appendChild(btn);
+  nameDiv.appendChild(btnName);
 
   // add action listener to button
-  btn.addEventListener('click', async () => {
+  btnName.addEventListener('click', async () => {
     if (inp.value != "") {
       win.name = inp.value;
       inp.value = "";
@@ -64,6 +107,18 @@ function processWindow(win, i) {
 
   //div.appendChild(nameDiv);
 
+  
+
+  var saveDiv = document.createElement('div');
+  var btnSave = document.createElement('button');
+  btnSave.innerText = "Save Window";
+  btnSave.addEventListener('click', async () => {
+    saveDiv = updateSaveDiv(saveDiv, win);
+
+  });
+  
+  saveDiv.appendChild(btnSave);
+  div.appendChild(saveDiv);
 
   let tabsH3 = document.createElement('H3');
   tabsH3.innerText = "Tabs";
