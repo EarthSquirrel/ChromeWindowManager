@@ -14,12 +14,19 @@ window.onload = function() {
   let maxWidth = 0;
   chrome.storage.local.get(null, function(items) {
     let allKeys = Object.keys(items);
+    let isSavedWindow = false;
     for (let i=0; i<allKeys.length; i++) {
       console.log(allKeys[i]);
       chrome.storage.local.get(allKeys[i], function (obj) {
         let key = allKeys[i];
         let win = obj[key];
         if (win.type == "closedWindow") {
+          if (!isSavedWindow) {
+            isSavedWindow = true;
+            let p = document.createElement('p');
+            p.innerText = "Open a saved window:";
+            closedWindows.appendChild(p);
+          }
           let rowDiv = document.createElement('div');
           rowDiv.id = key;
           rowDiv.className = "showClosedWindows";
@@ -39,7 +46,18 @@ window.onload = function() {
           }
           closedWindows.appendChild(rowDiv);
         }
+        console.log('iter: ' + i);
+        if (!isSavedWindow && i==(allKeys.length-1)) {
+          let p = document.createElement('p');
+          p.innerText = "There are no saved windows. Open Manager to save one.";
+          closedWindows.appendChild(p);
+        }
       });
+    }
+    if (!isSavedWindow && 0==allKeys.length) {
+      let p = document.createElement('p');
+      p.innerText = "There are no saved windows. Open Manager to save one.";
+      closedWindows.appendChild(p);
     }
   });
 
