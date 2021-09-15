@@ -4,3 +4,13 @@ p.warning {
   text-indent: 15px;
   font-size: 16px;
 }
+
+.savingWindow {
+  border-style: solid;
+  border-width: 5px;
+  border-color: blue;
+  padding-top: 0px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+}
