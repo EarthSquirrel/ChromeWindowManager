@@ -1,5 +1,10 @@
 // https://www.codeproject.com/Questions/5253015/How-to-get-all-tabs-details-from-current-browser-i
-
+var savedWins = "";
+chrome.storage.sync.get('saved', function(obj) {
+  savedWins = obj;
+  console.log('obj: ' + obj.saved);
+});
+console.log('savedWins: ' + savedWins);
 
 function updateSaveDiv(saveDiv, win){
   // remove all content in saveDiv
@@ -30,8 +35,16 @@ function updateSaveDiv(saveDiv, win){
   //create event listener
   btnSave.addEventListener('click', async () => {
     console.log(win);
-    let winStr = JSON.stringify(win);
-    console.log(winStr);
+    //let winStr = JSON.stringify(win);
+    //console.log(winStr);
+    //Can change 7 to 2 for longer results.
+    let r = (Math.random() + 1).toString(36).substring(2);
+    console.log('supposid random key: ' + r);
+    let data = {};
+    data[r] = {name: newName, winObject: win};
+    chrome.storage.local.set(data, function () {
+      console.log('added :' + data);
+    });
   });
 
   // add things to saveDiv
@@ -157,4 +170,14 @@ window.onload = function() {
       windowDiv.appendChild(processWindow(win, i));
     }
   });
+
+  // load saved windows tabs
+  chrome.storage.local.get(null, function(items) {
+    let allKeys = Object.keys(items);
+    console.log('allKeys ' + allKeys);
+    for (let i=0; i<allKeys.length; i++) {
+      console.log(allKeys[i]);
+    }
+  });
+
 }
