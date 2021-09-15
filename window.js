@@ -1,10 +1,17 @@
 // https://www.codeproject.com/Questions/5253015/How-to-get-all-tabs-details-from-current-browser-i
-var savedWins = "";
-chrome.storage.sync.get('saved', function(obj) {
-  savedWins = obj;
-  console.log('obj: ' + obj.saved);
-});
-console.log('savedWins: ' + savedWins);
+
+function listClosedWindow(obj) {
+  let div = document.createElement('div');
+  let h2 = document.createElement('h2');
+  h2.innerText = "Window name: " + obj.name;
+  div.appendChild(h2);
+  
+  let ul = buildTabsUl(obj.winObject.tabs);
+  div.appendChild(ul);
+
+  return div;
+}
+
 
 function updateSaveDiv(saveDiv, win){
   // remove all content in saveDiv
@@ -21,29 +28,24 @@ function updateSaveDiv(saveDiv, win){
   let nameLabel = document.createElement('label');
   nameLabel.innerText = "Name the window: ";
   let newName = document.createElement("input"); //input element, text
-  newName.type = "text"; //.setAttribute('type',"text");
-  //inp.setAttribute('name',"windowName");
-  //inp.setAttribute('placeholder', win.name);
-  //inp.setAttribute('id', labelId)
-  //newName.id = "newNameInput"
+  newName.type = "text";
 
   let btnSave = document.createElement('button');
-  //var btnNameId = 'btnNameChange' + i;
-  //btnName.id = btnNameId;
   btnSave.innerText = "Save Window";
  
   //create event listener
   btnSave.addEventListener('click', async () => {
     console.log(win);
-    //let winStr = JSON.stringify(win);
-    //console.log(winStr);
     //Can change 7 to 2 for longer results.
     let r = (Math.random() + 1).toString(36).substring(2);
-    console.log('supposid random key: ' + r);
     let data = {};
-    data[r] = {name: newName, winObject: win};
+    data[r] = {
+      name: newName.value, 
+      type: 'closedWindow',  
+      winObject: win
+    };
     chrome.storage.local.set(data, function () {
-      console.log('added :' + data);
+      console.log('added window:' + r);
     });
   });
 
@@ -57,18 +59,26 @@ function updateSaveDiv(saveDiv, win){
   
 }
 
+function buildTabsUl(tabs) {
+  //make list of all tabs
+  let ul = document.createElement('UL');
+  for (let t=0; t<tabs.length; t++) {
+    let tab = tabs[t];
+    let li = document.createElement('LI');
+    let a = document.createElement('A');
+    let linkText = document.createTextNode(tab.title);
+    a.appendChild(linkText);
+    a.title = tab.title;
+    a.href = tab.url;
+    li.appendChild(a);
+    ul.appendChild(li);
+  }
+  return ul;
+}
+
+
 function processWindow(win, i) {
   console.log(win);
-  //if (win.name == null) {
-    //win.name = "window " + (i+1);
-    //updateName(win.id, win.name);
-  //} 
-  let tabs = [];
-  console.log('processing : ' + win.tabs.length);
-  for (let j=0; j<win.tabs.length; j++) {
-    let t = win.tabs[j];
-    tabs.push(t);
-  }
 
   // create document option
   let div = document.createElement("DIV");
@@ -137,19 +147,7 @@ function processWindow(win, i) {
   tabsH3.innerText = "Tabs";
   div.appendChild(tabsH3);
   
-  //make list of all tabs
-  let ul = document.createElement('UL');
-  for (let t=0; t<tabs.length; t++) {
-    let tab = tabs[t];
-    let li = document.createElement('LI');
-    let a = document.createElement('A');
-    let linkText = document.createTextNode(tab.title);
-    a.appendChild(linkText);
-    a.title = tab.title;
-    a.href = tab.url;
-    li.appendChild(a);
-    ul.appendChild(li);
-  }
+  let ul = buildTabsUl(win.tabs);
   div.appendChild(ul);
 
   
@@ -172,11 +170,22 @@ window.onload = function() {
   });
 
   // load saved windows tabs
+  let closedDiv = document.getElementById("closedWindows");
   chrome.storage.local.get(null, function(items) {
     let allKeys = Object.keys(items);
     console.log('allKeys ' + allKeys);
     for (let i=0; i<allKeys.length; i++) {
       console.log(allKeys[i]);
+      chrome.storage.local.get(allKeys[i], function (obj) {
+        let key = allKeys[i];
+        let win = obj[key];
+        console.log('keys: ' + Object.keys(win));
+        console.log('getting: ' + key + ' of type: ' + win.type);
+        if (win.type == "closedWindow") {
+          let div = listClosedWindow(win);
+          closedDiv.appendChild(div);
+        }
+      });
     }
   });
 
