@@ -14,3 +14,19 @@ p.warning {
   padding-bottom: 15px;
   padding-left: 15px;
 }
+
+body.popup {
+  min-width: 300px;
+}
+
+
+.showClosedWindows {
+  padding-top: 2px;
+  padding-right: 5px;
+  padding-bottom: 2px;
+  padding-left: 5px;
+}
+label.showClosedWindows {
+  margin-left: 5px;
+}
+
