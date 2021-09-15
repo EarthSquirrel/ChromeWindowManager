@@ -1,5 +1,32 @@
 // https://www.codeproject.com/Questions/5253015/How-to-get-all-tabs-details-from-current-browser-i
 
+function openWindow(obj) {
+  let win = obj.winObject;
+  let acceptedKeys = ['height', 'incognito', 'left', 
+                      'setSelfAsOpener', 'state', 'top', 'type', 'width'];
+  let newWin = {};
+  for (let k=0; k<acceptedKeys.length; k++) {
+    let key = acceptedKeys[k];
+    if (key in win) {
+      newWin[key] = win[key];
+    }
+  }
+  let urls = [];
+  for (let t=0; t<win.tabs.length; t++){
+    urls.push(win.tabs[t].url);
+  }
+  newWin['url'] = urls;
+  newWin['focused'] = true;
+  chrome.windows.create(newWin); 
+  
+  // remove window from storage
+  chrome.storage.local.remove(obj.key, function () {
+    console.log('removed ' + obj.key + ' from storage');
+  });
+  let removeDiv = document.getElementById(obj.key);
+  removeDiv.remove();
+}
+
 function listClosedWindow(obj) {
   let tabs = obj.winObject.tabs;
   let win = obj.winObject;
@@ -12,30 +39,7 @@ function listClosedWindow(obj) {
   let btnOpen = document.createElement('button');
   btnOpen.innerText = "Open Window";
   btnOpen.addEventListener('click', async () => {
-    //let newWin = Object.assign({}, win);
-    let acceptedKeys = ['height', 'incognito', 'left', 
-                        'setSelfAsOpener', 'state', 'top', 'type', 'width'];
-    let newWin = {};
-    for (let k=0; k<acceptedKeys.length; k++) {
-      let key = acceptedKeys[k];
-      if (key in win) {
-        newWin[key] = win[key];
-      }
-    }
-    let urls = [];
-    for (let t=0; t<tabs.length; t++){
-      urls.push(tabs[t].url);
-    }
-    newWin['url'] = urls;
-    newWin['focused'] = true;
-    chrome.windows.create(newWin); 
-    
-    // remove window from storage
-    chrome.storage.local.remove(obj.key, function () {
-      console.log('removed ' + obj.key + ' from storage');
-    });
-    div.remove();
-    
+    openWindow(obj);  
   });
   div.appendChild(btnOpen);
   // list all the tabs
