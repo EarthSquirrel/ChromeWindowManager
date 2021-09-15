@@ -21,9 +21,13 @@ window.onload = function() {
         let win = obj[key];
         if (win.type == "closedWindow") {
           let rowDiv = document.createElement('div');
+          rowDiv.id = key;
           rowDiv.className = "showClosedWindows";
           let btn = document.createElement('button');
           btn.innerText = "open";
+          btn.addEventListener('click', async () => {
+           openWindow(obj[key]); 
+          });
           let lab = document.createElement('label');
           lab.className = "showClosedWindows";
           lab.innerText = win.name;

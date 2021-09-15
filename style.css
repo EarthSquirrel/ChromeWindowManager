@@ -18,8 +18,9 @@ p.warning {
 body.popup {
   min-width: 300px;
 }
-
-
+.center {
+  text-align: center;
+}
 .showClosedWindows {
   padding-top: 2px;
   padding-right: 5px;
