@@ -42,7 +42,7 @@ function updateSaveDiv(saveDiv, win){
   // update the class
   saveDiv.className = "savingWindow";
   var h4 = document.createElement('h4');
-  h4.innerText = "Save Window";
+  h4.innerText = "Save/close Window";
   saveDiv.appendChild(h4);
 
   //name the window
@@ -52,7 +52,7 @@ function updateSaveDiv(saveDiv, win){
   newName.type = "text";
 
   let btnSave = document.createElement('button');
-  btnSave.innerText = "Save Window";
+  btnSave.innerText = "Save/close Window";
  
   //create event listener
   btnSave.addEventListener('click', async () => {
