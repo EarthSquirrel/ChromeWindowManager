@@ -1,6 +1,11 @@
+function onError(error) {
+  console.log(`Error: ${error}`);
+  alert("Error opening window. No action taken.");
+}
+
 function openWindow(obj) {
   let win = obj.winObject;
-  let acceptedKeys = ['height', 'incognito', 'left', 
+  let acceptedKeys = ['height', 'incognito', 'left',
                       'setSelfAsOpener', 'state', 'top', 'type', 'width'];
   let newWin = {};
   for (let k=0; k<acceptedKeys.length; k++) {
@@ -15,14 +20,20 @@ function openWindow(obj) {
   }
   newWin['url'] = urls;
   newWin['focused'] = true;
-  chrome.windows.create(newWin); 
-  
-  // remove window from storage
-  chrome.storage.local.remove(obj.key, function () {
-    console.log('removed ' + obj.key + ' from storage');
-  });
-  let removeDiv = document.getElementById(obj.key);
-  removeDiv.remove();
+  console.log(newWin);
+  browser.windows.create(newWin).then((windowInfo)=>{
+    // Created window successfully! 
+    console.log(`Created window: ${windowInfo.id}`);
+    
+    // remove window from storage
+    chrome.storage.local.remove(obj.key, function () {
+      console.log('removed ' + obj.key + ' from storage');
+    });
+    let removeDiv = document.getElementById(obj.key);
+    removeDiv.remove();
+
+  }, onError);
+
 }
 
 
