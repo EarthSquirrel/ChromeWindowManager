@@ -7,6 +7,11 @@ function openWindow(obj) {
   let win = obj.winObject;
   let acceptedKeys = ['height', 'incognito', 'left',
                       'setSelfAsOpener', 'state', 'top', 'type', 'width'];
+  // giving errors with 'state': 'maximized' and keys 'left', 'height', 'width'
+  // 'top' so removing those
+  if (win['state'] == 'maximized'){
+    acceptedKeys = ['incognito', 'setSelfAsOpener', 'state', 'type'];
+  }
   let newWin = {};
   for (let k=0; k<acceptedKeys.length; k++) {
     let key = acceptedKeys[k];
