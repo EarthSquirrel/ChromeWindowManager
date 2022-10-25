@@ -63,7 +63,7 @@ function updateSaveDiv(saveDiv, win){
       saveDiv.appendChild(warning);
       return "";
     }
-    
+    win.userNamed = newName.value; // TODO: naming for each window
     console.log(win);
     //Can change 7 to 2 for longer results.
     let r = (Math.random() + 1).toString(36).substring(2);
@@ -130,7 +130,7 @@ function processWindow(win, i) {
   
   var saveDiv = document.createElement('div');
   var btnSave = document.createElement('button');
-  btnSave.innerText = "Save Window";
+  btnSave.innerText = "Save/close Window";
   btnSave.addEventListener('click', async () => {
     saveDiv = updateSaveDiv(saveDiv, win);
 
