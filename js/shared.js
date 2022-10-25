@@ -9,7 +9,7 @@ function openWindow(obj) {
                       'setSelfAsOpener', 'state', 'top', 'type', 'width'];
   // giving errors with 'state': 'maximized' and keys 'left', 'height', 'width'
   // 'top' so removing those
-  if (win['state'] == 'maximized'){
+  if (win['state'] == 'maximized' || win['state'] == 'minimized'){
     acceptedKeys = ['incognito', 'setSelfAsOpener', 'state', 'type'];
   }
   let newWin = {};
@@ -21,7 +21,15 @@ function openWindow(obj) {
   }
   let urls = [];
   for (let t=0; t<win.tabs.length; t++){
-    urls.push(win.tabs[t].url);
+    let url = win.tabs[t].url;
+    // new tabs give errors, blank urls correspond to new tabs
+    // TODO: Is this just a firefox thing?
+    console.log('userAgent: ' + checkIsFireFox());
+    if (checkIsFireFox() && url === 'about:newtab'){
+      // about:newtab is privlidged and therefore cannot be opened here
+      url = 'about:blank';
+    }
+    urls.push(url);
   }
   newWin['url'] = urls;
   newWin['focused'] = true;
@@ -29,7 +37,7 @@ function openWindow(obj) {
   browser.windows.create(newWin).then((windowInfo)=>{
     // Created window successfully! 
     console.log(`Created window: ${windowInfo.id}`);
-    
+    console.log(windowInfo)  
     // remove window from storage
     chrome.storage.local.remove(obj.key, function () {
       console.log('removed ' + obj.key + ' from storage');
@@ -41,4 +49,11 @@ function openWindow(obj) {
 
 }
 
+function checkIsFireFox(){
+  // return  true if browser is firefox, false if not
+  const userAgent = navigator.userAgent.toLowerCase();
+  console.log(userAgent);
+  console.log(userAgent.indexOf('firefox'));
+  return userAgent.indexOf('firefox') != 1;
+}
 
